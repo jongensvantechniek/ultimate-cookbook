@@ -13,7 +13,8 @@ node[:deploy].each do |application, deploy|
     node[:custom_env][application.to_s]["environment_variables"].each do |key, variable|
         execute "set_environment_variable" do
             user    "#{deploy[:user]}"
-            command "cd && echo 'export #{key}=#{variable}' >> .profile"
+            cwd     "/home/#{deploy[:user]}"
+            command "echo 'export #{key}=#{variable}' >> .profile"
             not_if  "cat .profile | grep #{key}=#{variable}"
         end
     end
