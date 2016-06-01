@@ -15,20 +15,19 @@ node[:deploy].each do |application, deploy|
             user    "#{deploy[:user]}"
             cwd     "/home/#{deploy[:user]}"
             command "echo 'export #{key}=#{variable}' >> .bashrc"
-            not_if  "cat .bashrc | grep #{key}=#{variable}"
+            not_if  "echo $#{key}"
         end
     end
 
     execute "stop_jar" do
         user    "#{deploy[:user]}"
-        command "screen -S #{application.to_s} -X quit"
-        only_if "screen -ls | grep #{application.to_s}"
+        command "pkill -f #{node[:custom_env][application.to_s]['jar']}"
     end
 
     execute "run_jar" do
         user    "#{deploy[:user]}"
         cwd     "#{deploy[:deploy_to]}/current"
-        command "screen -dmS #{application.to_s} java -jar #{node[:custom_env][application.to_s]['jar']}"
+        command "nohup java -jar #{node[:custom_env][application.to_s]['jar']} > log.txt 2> error.txt < /dev/null &"
     end
 
 end
