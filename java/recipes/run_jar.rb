@@ -10,8 +10,9 @@ node[:deploy].each do |application, deploy|
 
     node[:custom_env][application.to_s]["environment_variables"].each do |key, variable|
         execute "set environment variable" do
-            user    "#{deploy[:user]}"
-            command "export #{key}=#{variable}"
+            user    "root"
+            command "echo #{key}=#{variable} >> /etc/environment"
+            not_if "cat /etc/environment | grep #{key}=#{variable}"
         end
     end
 
