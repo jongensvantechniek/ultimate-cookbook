@@ -1,0 +1,8 @@
+.kitchen/
+.kitchen.local.yml
+*/.kitchen/*
+*/.kitchen.yml
+*/chefignore
+
+# Work in Progress
+angular/

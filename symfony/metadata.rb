@@ -1,0 +1,6 @@
+name             'symfony'
+maintainer       'Jongens van Techniek B.V.'
+maintainer_email 'brian@jongensvantechniek.nl'
+license          'CC BY-NC-ND 3.0'
+description      'Configuring Symfony'
+version          '0.1'
