@@ -15,7 +15,7 @@ node[:deploy].each do |application, deploy|
             user    "#{deploy[:user]}"
             cwd     "/home/#{deploy[:user]}"
             command "echo 'export #{key}=#{variable}' >> .bashrc"
-            not_if  "echo $#{key}"
+            not_if  "cat .bashrc | grep 'export #{key}=#{variable}'"
         end
     end
 
