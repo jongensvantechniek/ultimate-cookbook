@@ -17,6 +17,7 @@ node[:deploy].each do |application, deploy|
             :parameters =>  node[:deploy][application.to_s][:environment_variables],
             :application => application
         )
+        not_if             { ::File.exists?("#{deploy[:deploy_to]}/current/parameters.yml") }
     end
 
     execute "stop_jar" do
