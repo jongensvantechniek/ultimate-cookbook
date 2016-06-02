@@ -21,8 +21,8 @@ node[:deploy].each do |application, deploy|
 
     execute "stop_jar" do
         user                "#{deploy[:user]}"
-        command             "pkill -f #{node[:custom_env][application.to_s]['jar']}"
-        ignore_failure      true
+        command             "pkill -cf #{node[:custom_env][application.to_s]['jar']}"
+        only_if             "pgrep -f #{node[:custom_env][application.to_s]['jar']}"
     end
 
     execute "run_jar" do
