@@ -32,7 +32,7 @@ node[:deploy].each do |application, deploy|
         group               "root"
         owner               "#{deploy[:user]}"
         variables(
-            :parameters =>  node[:custom_env][application.to_s][:parameters],
+            :parameters =>  node[:deploy][application.to_s][:environment_variables],
             :application => application
         )
         only_if { ::File.directory? "#{deploy[:deploy_to]}/current/app/config" }
