@@ -14,7 +14,7 @@ node[:deploy].each do |application, deploy|
         group               "root"
         owner               "#{deploy[:user]}"
         variables(
-            :parameters =>  node[:custom_env][application.to_s][:environment_variables],
+            :parameters =>  node[:deploy][application.to_s][:environment_variables],
             :application => application
         )
     end
