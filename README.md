@@ -55,15 +55,33 @@ To specify which writable folders are required or which Symfony commands needs t
 ```
 
 ## Java
-### Example Custom JSON
+**java::configure** _(Lifecycle: Deploy)_
+
+This recipe sets up automatically the following:
+- Configures **parameters.yml** based on the configured **Environment Variables** in **Apps** in the root folder of the application.
+- Stops the corresponding running JAR (Java Archive) by sending a **SIGTERM** to the corresponding process.
+- Starts the corresponding JAR (Java Archive) as a daemon encapsulated in a **nohup** process.
+
+_Note:_ When the JAR (Java Archive) is running as a daemon, it logs application output to _logs.txt_ in the root folder of the application.
+
+_Note:_ When the JAR (Java Archive) is running as a daemon, it logs application errors to _errors.txt_ in the root folder of the application.
+
+_Note:_ When specifying the **Repository type** in **Apps** use **HTTP Archive.** The JAR (Java Archive) should be stored as a zip.
+
+_Recommendation:_ When using **HTTP Archive** use Artifactory for continuous integration and development.
+
+To specify which jar file needs to be run and daemonized, the following example **Custom JSON** can be used:
 
 ```
 {
   "custom_env": {
     "YOUR_APPLICATION": {
       "type": "java",
-      "jar": "testjar.jar"
+      "jar": "YOUR_JAR_FILE.jar"
     }
   }
 }
 ```
+
+## License
+Click the link to read the terms. Licensed under [Attribution-NonCommercial-NoDerivs 3.0 Unported](https://creativecommons.org/licenses/by-nc-nd/3.0/).
