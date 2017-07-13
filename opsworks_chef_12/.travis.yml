@@ -1,0 +1,42 @@
+---
+sudo: required
+services:
+  - docker
+
+rvm:
+  - 'ruby-2.4.0'
+
+addons:
+  apt:
+    sources:
+      - chef-stable-precise
+    packages:
+      - chefdk
+      - python-pip
+
+env:
+  matrix:
+    - INSTANCE=default-ubuntu-1604
+    - INSTANCE=all-options-ubuntu-1604
+    - INSTANCE=unicorn-apache-hanami-resque-ubuntu-1604
+    - INSTANCE=thin-nginx-padrino-delayed-job-ubuntu-1604
+    - INSTANCE=nullified-ubuntu-1604
+
+before_install:
+  - gem install bundler
+
+install:
+  - pip install --user yamllint
+  - chef exec bundle install --jobs=5 --retry=5
+
+before_script:
+  - sudo iptables -L DOCKER || sudo iptables -N DOCKER
+  - git config --global user.email "travis@travis.ci"
+  - git config --global user.name "Travis CI"
+  - chef exec bundle exec overcommit --sign
+  - chef exec bundle exec overcommit --sign pre-commit
+
+script:
+  - chef exec bundle exec overcommit -r
+  - chef exec bundle exec rspec
+  - travis_retry chef exec bundle exec rake integration:docker[${INSTANCE}]
